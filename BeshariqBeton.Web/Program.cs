@@ -52,8 +52,16 @@ builder.Services.Configure<RouteOptions>(options =>
 // AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+//builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+//    .AddCookie(options =>
+//    {
+//        options.LoginPath = "/user/log-in";
+//        options.LogoutPath = "/user/log-out";
+//        options.AccessDeniedPath = "/error/403";
+//        options.SlidingExpiration = false; // expiration set explicitly
+//        options.Events.OnValidatePrincipal = PrincipalCookieValidator.ValidatePrincipal;
+//    })
+//    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews(options =>
@@ -87,13 +95,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
                     options.SlidingExpiration = false; // expiration set explicitly
                     options.Events.OnValidatePrincipal = PrincipalCookieValidator.ValidatePrincipal;
                 })
-                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-                {
-                    options.Authority = settings.Url;
-                    // name of the API resource
-                    options.RequireHttpsMetadata = false;
-                    options.Audience = "default";
-                });
+                .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
 
 
 builder.Services.AddAuthorization(options =>
