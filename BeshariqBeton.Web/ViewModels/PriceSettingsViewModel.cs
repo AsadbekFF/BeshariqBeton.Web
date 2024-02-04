@@ -4,10 +4,6 @@ namespace BeshariqBeton.Web.ViewModels
 {
     public class PriceSettingsViewModel
     {
-        [Display(Name = "Logo")]
-        public string? LogoPath { get; set; }
-
-
         [Display(Name = "Sement narxi (kg)")]
         public int СementPriceKg { get; set; }
         [Display(Name = "Qumni narxi (metr kub)")]

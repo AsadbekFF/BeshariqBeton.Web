@@ -29,10 +29,6 @@ namespace BeshariqBeton.Web.Controllers
 
             try
             {
-                var companyParameters = await _defaultParametersService.GetCompanyParametersAsync();
-
-                model.LogoPath = companyParameters.LogoPath;
-                
                 var concreteConsistancesParameters = await _defaultParametersService.GetConcreteConsistancesParametersAsync();
 
                 model.СementWeightKg100 = concreteConsistancesParameters.СementWeightKg100;
@@ -109,9 +105,6 @@ namespace BeshariqBeton.Web.Controllers
             {
                 try
                 {
-                    var companyParameters = _mapper.Map<PriceSettingsViewModel, CompanyParameters>(model);
-                    await _defaultParametersService.SaveParametersAsync(companyParameters);
-
                     var concreteConsistancesParameters = _mapper.Map<PriceSettingsViewModel, ConcreteConsistancesParameters>(model);
                     await _defaultParametersService.SaveParametersAsync(concreteConsistancesParameters);
 
