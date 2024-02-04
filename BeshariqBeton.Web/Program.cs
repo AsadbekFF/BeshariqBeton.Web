@@ -52,16 +52,16 @@ builder.Services.Configure<RouteOptions>(options =>
 // AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-//builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-//    .AddCookie(options =>
-//    {
-//        options.LoginPath = "/user/log-in";
-//        options.LogoutPath = "/user/log-out";
-//        options.AccessDeniedPath = "/error/403";
-//        options.SlidingExpiration = false; // expiration set explicitly
-//        options.Events.OnValidatePrincipal = PrincipalCookieValidator.ValidatePrincipal;
-//    })
-//    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/user/log-in";
+        options.LogoutPath = "/user/log-out";
+        options.AccessDeniedPath = "/error/403";
+        options.SlidingExpiration = false; // expiration set explicitly
+        options.Events.OnValidatePrincipal = PrincipalCookieValidator.ValidatePrincipal;
+    })
+    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews(options =>
@@ -86,16 +86,16 @@ builder.Services
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.LoginPath = "/user/log-in";
-                    options.LogoutPath = "/user/log-out";
-                    options.AccessDeniedPath = "/error/403";
-                    options.SlidingExpiration = false; // expiration set explicitly
-                    options.Events.OnValidatePrincipal = PrincipalCookieValidator.ValidatePrincipal;
-                })
-                .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//                .AddCookie(options =>
+//                {
+//                    options.LoginPath = "/user/log-in";
+//                    options.LogoutPath = "/user/log-out";
+//                    options.AccessDeniedPath = "/error/403";
+//                    options.SlidingExpiration = false; // expiration set explicitly
+//                    options.Events.OnValidatePrincipal = PrincipalCookieValidator.ValidatePrincipal;
+//                })
+//                .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
 
 
 builder.Services.AddAuthorization(options =>
