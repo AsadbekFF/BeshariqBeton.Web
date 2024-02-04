@@ -20,17 +20,6 @@ namespace BeshariqBeton.BLL.Services
             _context = context;
         }
 
-        public async Task<CompanyParameters> GetCompanyParametersAsync()
-        {
-            var parameters = new CompanyParameters
-            {
-                LogoPath = null
-            };
-
-            await SetParameters(parameters);
-            return parameters;
-        }
-
         public async Task<ConcreteConsistancesParameters> GetConcreteConsistancesParametersAsync()
         {
             var parameters = new ConcreteConsistancesParameters();
