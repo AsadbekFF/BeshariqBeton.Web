@@ -1,0 +1,19 @@
+﻿<div id="success-message">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissable d-inline-flex w-100 justify-content-between">
+            <p>@Html.Raw(TempData["SuccessMessage"])</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+</div>
+
+<div id="error-message">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissable d-inline-flex w-100 justify-content-between">
+            <p>@Html.Raw(TempData["ErrorMessage"])</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+</div>

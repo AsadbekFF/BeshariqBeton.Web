@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Beshariq Beton</title>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/bootstrap-table/bootstrap-table.min.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/BeshariqBeton.Web.styles.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/font-awesome/css/all.min.css" asp-append-version="true"/>
+        @RenderSection("Styles", false)
+    </head>
+    <body style="display: flex; height: 100%; position: fixed; width: 100%;">
+        <div id="wrapper" class="d-flex w-100">
+            @if (!((bool?)ViewData["NoHeader"] ?? false))
+            {
+                <div class="align-items-start">
+                    <partial name="_SidebarMenu" />
+                </div>
+            }
+            <div id="content-wrapper" class="d-flex align-items-end flex-column w-100 p-3" style="overflow: auto">
+                <div class="align-items-start align-self-stretch h-100">
+                    @if (ViewData["Title"] != null && (ViewData["NoHeader"] == null || (bool)ViewData["NoHeader"] == false))
+                    {
+                        <h1>
+                            @if (ViewData["Header"] == null)
+                            {
+                                @ViewData["Title"]
+                            }
+                            else
+                            {
+                                @ViewData["Header"]
+                            }
+                        </h1>
+                        <hr />
+                    }
+                    @RenderSection("Breadcrumbs", false)
+                    <partial name="_Messages" />
+                    <partial name="_Notifications" />
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+        
+        <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+   
+        <script src="~/popper.js/umd/popper.min.js" asp-append-version="true"></script>
+        <script src="~/moment.js/moment.min.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
+        <script src="~/bootstrap-table/bootstrap-table.min.js" asp-append-version="true"></script>
+        <script src="~/bootstrap-table/locale/bootstrap-table-uz-Latn-UZ.min.js" asp-append-version="true"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/vue/vue.min.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+    </body>
+</html>

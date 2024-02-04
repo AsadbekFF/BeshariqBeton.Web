@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Klientlar";
+}
+
+@section Styles
+{
+    <link href="~/bootstrap-fileinput/css/fileinput.min.css" />
+}
+
+@section Breadcrumbs
+{
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Bosh sahifa</a></li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+}
+
+<div id="app">
+    <div id="toolbar" class="pb-3">
+        <a asp-action="Add" class="btn btn-success"><span class="fas fa-plus-circle"></span> Qo'shish</a>
+    </div>
+    <table id="data-table" class="table">
+        <thead>
+            <tr>
+                <th data-field="name" data-sortable="true">Nomi</th>
+                <th data-field="address" data-sortable="true">Address</th>
+                <th data-field="phoneNumber" data-sortable="true">Telefon raqami</th>
+                <th data-field="distanceKm" data-sortable="true">Masofa</th>
+                <th data-formatter="manageFormatter" data-width="220">Boshqaruv</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+@section Scripts
+{
+    <partial name="_DataTable" />
+}

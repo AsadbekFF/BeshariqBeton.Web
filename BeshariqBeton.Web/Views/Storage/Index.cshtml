@@ -1,0 +1,81 @@
+﻿@model StorageViewModel
+
+@{
+    ViewData["Title"] = "Sklad";
+}
+
+@section Breadcrumbs
+{
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Bosh sahifa</a></li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+}
+
+<div id="app">
+    <div class="row mb-3">
+        <div class="col-2">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStorageModal">
+                Qo'shish
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-auto">
+            <label asp-for="CementRemainKg"></label>
+            <input asp-for="CementRemainKg" class="form-control" disabled/>
+        </div>
+        <div class="col-auto">
+            <label asp-for="SandRemainM3"></label>
+            <input asp-for="SandRemainM3" class="form-control" disabled />
+        </div>
+        <div class="col-auto">
+            <label asp-for="ShebenRemainM3"></label>
+            <input asp-for="ShebenRemainM3" class="form-control" disabled />
+        </div>
+        <div class="col-auto">
+            <label asp-for="ChemicalRemainKg"></label>
+            <input asp-for="ChemicalRemainKg" class="form-control" disabled />
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addStorageModal" tabindex="-1" aria-labelledby="addStorageModal" aria-hidden="true">
+    <form asp-antiforgery="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Skladga qo'shish</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="cementWeight" class="form-label">Sement miqdori</label>
+                        <input class="form-control" id="cementWeight" name="cementWeight">
+                    </div>
+                    <div class="mb-3">
+                        <label for="sandVolume" class="form-label">Qum miqdori</label>
+                        <input class="form-control" id="sandVolume" name="sandVolume">
+                    </div>
+                    <div class="mb-3">
+                        <label for="shebenVolume" class="form-label">Sheben miqdori</label>
+                        <input class="form-control" id="shebenVolume" name="shebenVolume">
+                    </div>
+                    <div class="mb-3">
+                        <label for="chemicalWeight" class="form-label">Ximikat miqdori</label>
+                        <input class="form-control" id="chemicalWeight" name="chemicalWeight">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yopish</button>
+                    <button type="submit" class="btn btn-primary">Qo'shish</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+@section Scripts
+{
+    <partial name="_DataTable" />
+}

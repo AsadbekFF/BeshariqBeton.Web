@@ -1,0 +1,72 @@
+﻿@{
+    ViewData["Title"] = "Sotuvlar";
+}
+
+@section Styles
+{
+    <link href="~/bootstrap-fileinput/css/fileinput.min.css" />
+}
+
+@section Breadcrumbs
+{
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Bosh sahifa</a></li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+}
+
+<div id="app">
+    <div id="toolbar" class="pb-3">
+        <a asp-action="Add" class="btn btn-success"><span class="fas fa-plus-circle"></span> Qo'shish</a>
+    </div>
+    <table id="data-table" class="table">
+        <thead>
+            <tr>
+                <th data-field="client.name" data-sortable="true">Klient nomi</th>
+                <th data-field="concreteProductType" data-formatter="concreteTypeFormatter" data-sortable="true">Produkta turi</th>
+                <th data-field="count" data-sortable="true">Miqdori</th>
+                <th data-field="comeOutDateTime" data-sortable="true" data-formatter="dateTimeFormatter">Chiqib ketgan vaqti</th>
+                <th data-field="comeInDateTime" data-sortable="true" data-formatter="dateTimeFormatter">Qaytib kelgan vaqti</th>
+                <th data-field="totalPrice" data-sortable="true" data-formatter="priceFormatter">Jami narxi</th>
+                <th data-formatter="manageFormatter" data-width="220">Boshqaruv</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+@section Scripts
+{
+    <script>
+        dataTableOptions = {
+            search: true,
+            url: '@Url.Action("GetDataJsonSearch")'
+        }
+        function concreteTypeFormatter(value) {
+            
+            switch (value) {
+                case 0:
+                    return 'Beton 100';
+                case '1':
+                    return 'Beton 150';
+                case '2':
+                    return 'Beton 200';
+                case '3':
+                    return 'Beton 250';
+                case '4':
+                    return 'Beton 300';
+                case '5':
+                    return 'Beton 350';
+                case '6':
+                    return 'Beton 400';
+                case '7':
+                    return 'Quyqa';
+                case '8':
+                    return 'Plastinka';
+                case '9':
+                    return 'Quduq';
+            }
+        } 
+    </script>
+    <partial name="_DataTable" />
+}

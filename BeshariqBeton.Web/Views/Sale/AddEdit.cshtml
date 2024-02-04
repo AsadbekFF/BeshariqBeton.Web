@@ -1,0 +1,117 @@
+﻿@model SaleViewModel
+
+@{
+    ViewData["Title"] = "Sotuvni " + (!Html.IsAddPage() ? "o'zgartirish" : "qo'shish");
+}
+
+@inject ListHelper ListHelper
+
+@section Breadcrumbs
+{
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Bosh sahifa</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Sale" asp-action="Index">Sotuvlar</a></li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+}
+
+<form asp-antiforgery="true" id="app">
+    <div class="row">
+        <div class="col-lg-4 col-md-6">
+            <div class="mb-3">
+                <label class="form-label" asp-for="ClientId"></label>
+                <select class="form-select" asp-items="@await ListHelper.GetClientsAsync()" asp-for="ClientId"></select>
+                <span class="text-danger" asp-validation-for="ClientId"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="ConcreteProductType"></label>
+                <select class="form-select" asp-items="@Html.GetEnumSelectList<ConcreteProductType>()" asp-for="ConcreteProductType"></select>
+                <span class="text-danger" asp-validation-for="ConcreteProductType"></span>
+            </div>
+            <div v-show="!isSump">
+                <div class="mb-3">
+                    <label class="form-label" asp-for="Count"></label>
+                    <input class="form-control" asp-for="Count" />
+                    <span class="text-danger" asp-validation-for="Count"></span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="ComeOutDateTime"></label>
+                <input class="form-control" asp-for="ComeOutDateTime" />
+                <span class="text-danger" asp-validation-for="ComeOutDateTime"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="ComeInDateTime"></label>
+                <input class="form-control" asp-for="ComeInDateTime" />
+                <span class="text-danger" asp-validation-for="ComeInDateTime"></span>
+            </div>
+            <div v-show="isSump">
+                <div class="mb-3">
+                    <label class="form-label" asp-for="BottomCount"></label>
+                    <input class="form-control" asp-for="BottomCount" />
+                    <span class="text-danger" asp-validation-for="BottomCount"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="Sump60Count"></label>
+                    <input class="form-control" asp-for="Sump60Count" />
+                    <span class="text-danger" asp-validation-for="Sump60Count"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="Sump90Count"></label>
+                    <input class="form-control" asp-for="Sump90Count" />
+                    <span class="text-danger" asp-validation-for="Sump90Count"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="CoverCount"></label>
+                    <input class="form-control" asp-for="CoverCount" />
+                    <span class="text-danger" asp-validation-for="CoverCount"></span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="TotalPrice"></label>
+                <input class="form-control" asp-for="TotalPrice" disabled />
+                <span class="text-danger" asp-validation-for="TotalPrice"></span>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-success" formaction="@(!Html.IsAddPage() ? Url.Action("Edit") : Url.Action("Add"))">
+            <span class="fas fa-save"></span>
+            Saqlash
+        </button>
+        <button type="submit" class="btn btn-success" formaction="@(!Html.IsAddPage() ? Url.Action("Edit", new { goBack=true } ) : Url.Action("Add", new { goBack=true }))">
+            <span class="fas fa-save"></span>
+            <span class="fas fa-list"></span>
+            Saqlash va ortga qaytish
+        </button>
+        <button type="submit" class="btn btn-primary" formaction="@Url.Action("GetTotalPrice")">
+            <span class="fas fa-calculator"></span>
+            Hisoblash
+        </button>
+        <a asp-action="Index" class="btn btn-secondary">
+            <span class="fas fa-arrow-circle-left"></span>
+            Ortga qaytish
+        </a>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/bootstrap-datepicker/locales/bootstrap-datepicker.uz-latn.min.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                isSump: @((Model?.ConcreteProductType == ConcreteProductType.Sump).ToString().ToLowerInvariant())
+                    }
+        });
+
+        $(function () {
+            $('#@Html.NameFor(m => m.ConcreteProductType)').on('change', function () {
+                app.isSump = $('#@Html.NameFor(m => m.ConcreteProductType)').val() == 7;
+            });
+        });
+    </script>
+}

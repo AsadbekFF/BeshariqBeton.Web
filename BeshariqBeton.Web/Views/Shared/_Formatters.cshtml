@@ -1,0 +1,60 @@
+﻿<form method="post" id="deleteForm">
+    <div class="modal fade" id="confirmDelete" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">O'chirishni tasdiqlash'</h4>
+                    <button type="button" class="close" data-bs-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body">
+                    <p>O'chirishni xohlaysizmi?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <span class="fas fa-times-circle"></span>
+                        Bekor qilish
+                    </button>
+                    <button type="submit" class="btn btn-danger">
+                        <span class="fas fa-trash"></span>
+                        O'chirish
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    function manageFormatter(value, entity) {
+        return '<div class="btn-group btn-group-sm" role="group"><a href="@Url.Action("Edit")/' + entity.id + '" class="btn btn-sm btn-secondary"><span class="fas fa-edit"></span> O\'zgartirish</a><button type="button" class="btn btn-sm btn-danger" data-id="' + entity.id + '" data-delete-url="@Url.Action("Delete")" data-bs-toggle="modal" data-bs-target="#confirmDelete"><span class="fas fa-trash"></span> O\'chirish</button></div>'
+    }
+
+    function priceFormatter(value) {
+        var priceString = value.toString();
+
+        if (priceString.indexOf('.') > 0) {
+            priceString = priceString.substring(0, priceString.indexOf('.'));
+        }
+        
+        var result = '';
+        var processedCount = 0;
+        for (var i = priceString.length - 1; i >= 0; i--) {
+            if (processedCount == 3) {
+                result = ' ' + result;
+                processedCount = 0;
+            }
+
+            result = priceString[i] + result;
+            processedCount++;
+        }
+
+        return result;
+    }
+
+    function dateTimeFormatter(value) {
+        if (!value)
+            return value;
+
+        return moment(value).format('DD/MM/yyyy HH:mm:ss');
+    }
+</script>

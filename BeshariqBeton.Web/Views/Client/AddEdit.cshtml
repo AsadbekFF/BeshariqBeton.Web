@@ -1,0 +1,44 @@
+﻿@model ClientViewModel
+
+@{
+    ViewData["Title"] = "Klientni " + (Html.IsEditPage() ? "o'zgartirish" : "qo'shish");
+}
+
+@section Breadcrumbs
+{
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Bosh sahifa</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Client" asp-action="Index">Klientlar</a></li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+}
+
+<form asp-antiforgery="true" id="app">
+    <div class="row">
+        <div class="col-lg-4 col-md-6">
+            <div class="mb-3">
+                <label class="form-label" asp-for="Name"></label>
+                <input class="form-control" asp-for="Name" />
+                <span class="text-danger" asp-validation-for="Name"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="Address"></label>
+                <input class="form-control" asp-for="Address" />
+                <span class="text-danger" asp-validation-for="Address"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="PhoneNumber"></label>
+                <input class="form-control" asp-for="PhoneNumber" />
+                <span class="text-danger" asp-validation-for="PhoneNumber"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="DistanceKm"></label>
+                <input class="form-control" asp-for="DistanceKm" />
+                <span class="text-danger" asp-validation-for="DistanceKm"></span>
+            </div>
+        </div>
+    </div>
+    <partial name="_SaveBackButtons" />
+</form>

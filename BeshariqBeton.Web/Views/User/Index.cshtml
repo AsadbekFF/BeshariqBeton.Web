@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Foydalanuvchilar";
+}
+
+@section Styles
+{
+    <link href="~/bootstrap-fileinput/css/fileinput.min.css" />
+}
+
+@section Breadcrumbs
+{
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Bosh sahifa</a></li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+}
+
+<div id="app">
+    <div id="toolbar" class="pb-3">
+        <a asp-action="Add" class="btn btn-success"><span class="fas fa-plus-circle"></span> Qo'shish</a>
+    </div>
+    <table id="data-table" class="table">
+        <thead>
+            <tr>
+                <th data-field="username" data-sortable="true">Foydalanuvchi nomi</th>
+                <th data-field="firstName" data-sortable="true">Ismi</th>
+                <th data-field="lastname" data-sortable="true">Familiyasi</th>
+                <th data-field="phoneNumber" data-sortable="true">Telefon raqami</th>
+                <th data-field="role" data-formatter="roleFormatter" data-sortable="true">Roli</th>
+                <th data-formatter="manageFormatter" data-width="220">Boshqaruv</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+@section Scripts
+{
+    <partial name="_DataTable" />
+    <script>
+        function roleFormatter(value) {
+            switch (value) {
+                case 0:
+                    return 'User';
+                case '1':
+                    return 'Admin';
+            }
+        }
+    </script>
+}

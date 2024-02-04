@@ -1,0 +1,101 @@
+﻿@model UserViewModel
+
+@{
+    ViewData["Title"] = "Foydalanuvchini " + (Html.IsEditPage() ? "o'zgartirish" : "qo'shish");
+}
+
+@section Breadcrumbs
+{
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Bosh sahifa</a></li>
+            <li class="breadcrumb-item"><a asp-controller="User" asp-action="Index">Foydalanuvchilar</a></li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+}
+
+<form asp-antiforgery="true" id="app">
+    <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+            <a class="nav-link active show" data-bs-toggle="tab" href="#userSettings">
+                <span class="fas fa-fw fa-user"></span> Foydalanuvchi
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#permissionsSettings">
+                <span class="fas fa-fw fa-shield"></span> Ruxsatlar
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content p-3">
+        <div class="tab-pane fade show active" id="userSettings">
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Username"></label>
+                        <input class="form-control" asp-for="Username" />
+                        <span class="text-danger" asp-validation-for="Username"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="FirstName"></label>
+                        <input class="form-control" asp-for="FirstName" />
+                        <span class="text-danger" asp-validation-for="FirstName"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Lastname"></label>
+                        <input class="form-control" asp-for="Lastname" />
+                        <span class="text-danger" asp-validation-for="Lastname"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Password"></label>
+                        <input class="form-control" asp-for="Password" />
+                        <span class="text-danger" asp-validation-for="Password"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="PhoneNumber"></label>
+                        <input class="form-control" asp-for="PhoneNumber" />
+                        <span class="text-danger" asp-validation-for="PhoneNumber"></span>
+                    </div>
+                </div>
+            </div>
+            <partial name="_SaveBackButtons" />
+        </div>
+        <div class="tab-pane fade" id="permissionsSettings">
+            <div class="row">
+                <div class="col">
+                    <h4>Standart ruxsatlar</h4>
+                    <div id="standard-permissions-container" class="table-responsive-sm">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="col-11">Permission</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.StandardPermissions.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.HiddenFor(x => Model.StandardPermissions[i].Id)
+                                            @Html.HiddenFor(x => Model.StandardPermissions[i].Name)
+                                            @Html.DisplayFor(x => Model.StandardPermissions[i].Name)
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="custom-control custom-checkbox">
+                                                @Html.CheckBoxFor(x => Model.StandardPermissions[i].Allow, new { @class = "custom-control-input" })
+                                                @Html.LabelFor(x => Model.StandardPermissions[i].Allow, "", new { @class = "custom-control-label" })
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <partial name="_SaveBackButtons" />
+        </div>
+    </div>
+</form>

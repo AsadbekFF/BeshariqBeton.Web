@@ -1,0 +1,21 @@
+﻿<script>
+    defaultDataTableOptions.url = '@Url.Action("GetDataJson")';
+    defaultDataTableOptions.formatLoadingMessage = function () {
+        return '<span class="fas fa-spinner fa-spin fa-fw"></span> Yuklanmoqda, kuting';
+    };
+    defaultDataTableOptions.editUrl = '@Url.Action("Edit")';
+    defaultDataTableOptions.deleteUrl = '@Url.Action("Delete")';
+    defaultDataTableOptions.editButtonText = 'O\'zgartirish';
+    defaultDataTableOptions.deleteButtonText = 'O\'chirish';
+    defaultDataTableOptions.moreButtonText = 'Qo\'shimmcha';
+
+    $(function () {
+        if (typeof dataTableOptions !== 'undefined' && dataTableOptions)
+            // $('#data-table').bootstrapTable(dataTableOptions);
+            initializeDataTable('#data-table', null, dataTableOptions);
+        else
+            // $('#data-table').bootstrapTable(defaultDataTableOptions);
+            initializeDataTable('#data-table');
+    });
+</script>
+<partial name="_Formatters" />

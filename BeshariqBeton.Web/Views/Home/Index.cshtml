@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "Bosh sahifa";
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/bootstrap-datepicker/css/bootstrap-datepicker.min.css" asp-append-version="true"/>
+}
+
+<div id="app">
+    <div class="row mb-5">
+        <div class="col-12">
+            <canvas id="monthlyChart" height="60"></canvas>
+        </div>
+    </div>
+    <div class="row g-3">
+        <div class="col-auto">
+            <label for="monthFilterInput" class="visually-hidden">From</label>
+            <input id="monthFilterInput" class="form-control" />
+        </div>
+        <div class="col-auto">
+            <button type="button" id="filterButton" class="btn btn-primary mb-3"><span class="fas fa-magnifying-glass"></span> Ko'rsatish</button>
+        </div>
+    </div>
+    <div class="row mb-5">
+        <div class="col-12">
+            <canvas id="dailyChart" height="60"></canvas>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script src="~/Chart.js/chart.umd.js"></script>
+    <script src="~/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        var yearChart;
+        var monthChart;
+        $(function () {
+            httpGet('@Url.Action("GetYearStatistics")', null, function (result) {
+                yearChart = new Chart(document.getElementById('monthlyChart').getContext("2d"), {
+                    type: 'line',
+                    data: {
+                        labels: result.labels,
+                        datasets: result.datasets
+                    }
+                });
+            });
+
+            $('#filterButton').on('click', function () {
+                httpGet('@Url.Action("GetMonthStatistics")', { date: $('#monthFilterInput').val() }, function (result) {
+                    if (monthChart) {
+                        var labelsLength = monthChart.data.labels.length;
+                        var dataSetsLength = monthChart.data.datasets.length;
+
+                        for (var i = 0; i < labelsLength; i++) {
+                            monthChart.data.labels.pop();
+                        }
+
+                        for (var i = 0; i < dataSetsLength; i++) {
+                            monthChart.data.datasets.pop();
+                        }
+
+                        result.labels.forEach((label) => {
+                            monthChart.data.labels.push(label);
+                        });
+
+                        result.datasets.forEach((dataSet) => {
+                            monthChart.data.datasets.push(dataSet);
+                        });
+
+                        monthChart.update();
+                    }
+                    else {
+                        monthChart = new Chart(document.getElementById('dailyChart').getContext("2d"), {
+                            type: 'line',
+                            data: {
+                                labels: result.labels,
+                                datasets: result.datasets
+                            }
+                        });
+                    }
+
+                });
+            });
+
+            $('#monthFilterInput').datepicker({
+                format: "mm/yyyy",
+                startView: "months",
+                minViewMode: "months"
+            });
+        });
+    </script>
+}
+

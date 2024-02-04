@@ -1,0 +1,412 @@
+﻿@model PriceSettingsViewModel
+
+@{
+    ViewData["Title"] = "Sozlamalar";
+}
+
+@section Styles
+{
+    <link href="~/bootstrap-fileinput/css/fileinput.min.css" />
+}
+
+@section Breadcrumbs
+{
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Bosh sahifa</a></li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+}
+
+<form id="settingsForm" asp-antiforgery="true">
+    <div class="p-3">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link active show" data-bs-toggle="tab" href="#companySettings">
+                    <span class="fas fa-fw fa-building"></span> Kompaniya sozlamasi
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#concreteSettings">
+                    <span class="fas fa-fw fa-layer-group"></span> Beton turlari tarkibi
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#concreteTypePricesSettings">
+                    <span class="fas fa-fw fa-money-bill-wave"></span> Beton turlarining narxlari
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#distanceSettings">
+                    <span class="fas fa-fw fa-truck-fast"></span> Masofa narxlari
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content p-3">
+            <div class="tab-pane fade show active" id="companySettings">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="mb-3">
+                            <label asp-for="LogoPath" class="form-label"></label>
+                            <input asp-for="LogoPath" class="form-control" />
+                            <span class="text-danger" asp-validation-for="LogoPath"></span>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">
+                    <span class="fas fa-save"></span>
+                    Saqlash
+                </button>
+                <button type="submit" class="btn btn-success" formaction="?goback=True">
+                    <span class="fas fa-save"></span>
+                    <span class="fas fa-list"></span>
+                    Saqlash va ortga qaytish
+                </button>
+                <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">
+                    <span class="fas fa-arrow-circle-left"></span>
+                   Ortga qaytish
+                </a>
+            </div>
+            <div class="tab-pane fade" id="concreteSettings">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <h3>Beton 100</h3>
+                        <div class="mb-3">
+                            <label asp-for="СementWeightKg100" class="form-label"></label>
+                            <input asp-for="СementWeightKg100" class="form-control" />
+                            <span class="text-danger" asp-validation-for="СementWeightKg100"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="SandVolume100" class="form-label"></label>
+                            <input asp-for="SandVolume100" class="form-control" />
+                            <span class="text-danger" asp-validation-for="SandVolume100"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="ShabenVolume100" class="form-label"></label>
+                            <input asp-for="ShabenVolume100" class="form-control" />
+                            <span class="text-danger" asp-validation-for="ShabenVolume100"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="СhemicalKg100" class="form-label"></label>
+                            <input asp-for="СhemicalKg100" class="form-control" />
+                            <span class="text-danger" asp-validation-for="СhemicalKg100"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <h3>Beton 150</h3>
+                        <div class="mb-3">
+                            <label asp-for="СementWeightKg150" class="form-label"></label>
+                            <input asp-for="СementWeightKg150" class="form-control" />
+                            <span class="text-danger" asp-validation-for="СementWeightKg150"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="SandVolume150" class="form-label"></label>
+                            <input asp-for="SandVolume150" class="form-control" />
+                            <span class="text-danger" asp-validation-for="SandVolume150"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="ShabenVolume150" class="form-label"></label>
+                            <input asp-for="ShabenVolume150" class="form-control" />
+                            <span class="text-danger" asp-validation-for="ShabenVolume150"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="СhemicalKg150" class="form-label"></label>
+                            <input asp-for="СhemicalKg150" class="form-control" />
+                            <span class="text-danger" asp-validation-for="СhemicalKg150"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <h3>Beton 200</h3>
+                        <div class="mb-3">
+                            <label asp-for="СementWeightKg200" class="form-label"></label>
+                            <input asp-for="СementWeightKg200" class="form-control" />
+                            <span class="text-danger" asp-validation-for="СementWeightKg200"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="SandVolume200" class="form-label"></label>
+                            <input asp-for="SandVolume200" class="form-control" />
+                            <span class="text-danger" asp-validation-for="SandVolume200"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="ShabenVolume200" class="form-label"></label>
+                            <input asp-for="ShabenVolume200" class="form-control" />
+                            <span class="text-danger" asp-validation-for="ShabenVolume200"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="СhemicalKg200" class="form-label"></label>
+                            <input asp-for="СhemicalKg200" class="form-control" />
+                            <span class="text-danger" asp-validation-for="СhemicalKg200"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <h3>Beton 250</h3>
+                        <div class="mb-3">
+                            <label asp-for="СementWeightKg250" class="form-label"></label>
+                            <input asp-for="СementWeightKg250" class="form-control" />
+                            <span class="text-danger" asp-validation-for="СementWeightKg250"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="SandVolume250" class="form-label"></label>
+                            <input asp-for="SandVolume250" class="form-control" />
+                            <span class="text-danger" asp-validation-for="SandVolume250"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="ShabenVolume250" class="form-label"></label>
+                            <input asp-for="ShabenVolume250" class="form-control" />
+                            <span class="text-danger" asp-validation-for="ShabenVolume250"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="СhemicalKg250" class="form-label"></label>
+                            <input asp-for="СhemicalKg250" class="form-control" />
+                            <span class="text-danger" asp-validation-for="СhemicalKg250"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <h3>Beton 300</h3>
+                        <div class="mb-3">
+                            <label asp-for="СementWeightKg300" class="form-label"></label>
+                            <input asp-for="СementWeightKg300" class="form-control" />
+                            <span class="text-danger" asp-validation-for="СementWeightKg300"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="SandVolume300" class="form-label"></label>
+                            <input asp-for="SandVolume300" class="form-control" />
+                            <span class="text-danger" asp-validation-for="SandVolume300"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="ShabenVolume300" class="form-label"></label>
+                            <input asp-for="ShabenVolume300" class="form-control" />
+                            <span class="text-danger" asp-validation-for="ShabenVolume300"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="СhemicalKg300" class="form-label"></label>
+                            <input asp-for="СhemicalKg300" class="form-control" />
+                            <span class="text-danger" asp-validation-for="СhemicalKg300"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <h3>Beton 350</h3>
+                        <div class="mb-3">
+                            <label asp-for="СementWeightKg350" class="form-label"></label>
+                            <input asp-for="СementWeightKg350" class="form-control" />
+                            <span class="text-danger" asp-validation-for="СementWeightKg350"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="SandVolume350" class="form-label"></label>
+                            <input asp-for="SandVolume350" class="form-control" />
+                            <span class="text-danger" asp-validation-for="SandVolume350"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="ShabenVolume350" class="form-label"></label>
+                            <input asp-for="ShabenVolume350" class="form-control" />
+                            <span class="text-danger" asp-validation-for="ShabenVolume350"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="СhemicalKg350" class="form-label"></label>
+                            <input asp-for="СhemicalKg350" class="form-control" />
+                            <span class="text-danger" asp-validation-for="СhemicalKg350"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <h3>Beton 400</h3>
+                        <div class="mb-3">
+                            <label asp-for="СementWeightKg400" class="form-label"></label>
+                            <input asp-for="СementWeightKg400" class="form-control" />
+                            <span class="text-danger" asp-validation-for="СementWeightKg400"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="SandVolume400" class="form-label"></label>
+                            <input asp-for="SandVolume400" class="form-control" />
+                            <span class="text-danger" asp-validation-for="SandVolume400"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="ShabenVolume400" class="form-label"></label>
+                            <input asp-for="ShabenVolume400" class="form-control" />
+                            <span class="text-danger" asp-validation-for="ShabenVolume400"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="СhemicalKg400" class="form-label"></label>
+                            <input asp-for="СhemicalKg400" class="form-control" />
+                            <span class="text-danger" asp-validation-for="СhemicalKg400"></span>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">
+                    <span class="fas fa-save"></span>
+                    Saqlash
+                </button>
+                <button type="submit" class="btn btn-success" formaction="?goback=True">
+                    <span class="fas fa-save"></span>
+                    <span class="fas fa-list"></span>
+                    Saqlash va ortga qaytish
+                </button>
+                <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">
+                    <span class="fas fa-arrow-circle-left"></span>
+                   Ortga qaytish
+                </a>
+            </div>
+            <div class="tab-pane fade" id="concreteTypePricesSettings">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <h3>Beton tarkibining narxlari</h3>
+                        <div class="mb-3">
+                            <label asp-for="СementPriceKg" class="form-label"></label>
+                            <input asp-for="СementPriceKg" class="form-control" />
+                            <span class="text-danger" asp-validation-for="СementPriceKg"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="SandPriceM3" class="form-label"></label>
+                            <input asp-for="SandPriceM3" class="form-control" />
+                            <span class="text-danger" asp-validation-for="SandPriceM3"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="ShabenPriceM3" class="form-label"></label>
+                            <input asp-for="ShabenPriceM3" class="form-control" />
+                            <span class="text-danger" asp-validation-for="ShabenPriceM3"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="СhemicalPriceKg" class="form-label"></label>
+                            <input asp-for="СhemicalPriceKg" class="form-control" />
+                            <span class="text-danger" asp-validation-for="СhemicalPriceKg"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <h3>Kolodets qismlarining narxlari</h3>
+                        <div class="mb-3">
+                            <label asp-for="BottomPrice" class="form-label"></label>
+                            <input asp-for="BottomPrice" class="form-control" />
+                            <span class="text-danger" asp-validation-for="BottomPrice"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Sump60Price" class="form-label"></label>
+                            <input asp-for="Sump60Price" class="form-control" />
+                            <span class="text-danger" asp-validation-for="Sump60Price"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Sump90Price" class="form-label"></label>
+                            <input asp-for="Sump90Price" class="form-control" />
+                            <span class="text-danger" asp-validation-for="Sump90Price"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="CoverPrice" class="form-label"></label>
+                            <input asp-for="CoverPrice" class="form-control" />
+                            <span class="text-danger" asp-validation-for="CoverPrice"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <h3>Beton turlarining narxlari va stavka</h3>
+                        <div class="mb-3">
+                            <label asp-for="PlatePrice" class="form-label"></label>
+                            <input asp-for="PlatePrice" class="form-control" />
+                            <span class="text-danger" asp-validation-for="PlatePrice"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="CinderBlockPrice" class="form-label"></label>
+                            <input asp-for="CinderBlockPrice" class="form-control" />
+                            <span class="text-danger" asp-validation-for="CinderBlockPrice"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="InterestRate" class="form-label"></label>
+                            <input asp-for="InterestRate" class="form-control" />
+                            <span class="text-danger" asp-validation-for="InterestRate"></span>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">
+                    <span class="fas fa-save"></span>
+                    Saqlash
+                </button>
+                <button type="submit" class="btn btn-success" formaction="?goback=True">
+                    <span class="fas fa-save"></span>
+                    <span class="fas fa-list"></span>
+                    Saqlash va ortga qaytish
+                </button>
+                <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">
+                    <span class="fas fa-arrow-circle-left"></span>
+                   Ortga qaytish
+                </a>
+            </div>
+            <div class="tab-pane fade" id="distanceSettings">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="mb-3">
+                            <label asp-for="InitialDistanceKm" class="form-label"></label>
+                            <input asp-for="InitialDistanceKm" class="form-control" />
+                            <span class="text-danger" asp-validation-for="InitialDistanceKm"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="InitialDistancePrice" class="form-label"></label>
+                            <input asp-for="InitialDistancePrice" class="form-control" />
+                            <span class="text-danger" asp-validation-for="InitialDistancePrice"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="AfterInitialDistanceKm" class="form-label"></label>
+                            <input asp-for="AfterInitialDistanceKm" class="form-control" />
+                            <span class="text-danger" asp-validation-for="AfterInitialDistanceKm"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="AfterInitialDistancePrice" class="form-label"></label>
+                            <input asp-for="AfterInitialDistancePrice" class="form-control" />
+                            <span class="text-danger" asp-validation-for="AfterInitialDistancePrice"></span>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">
+                    <span class="fas fa-save"></span>
+                    Saqlash
+                </button>
+                <button type="submit" class="btn btn-success" formaction="?goback=True">
+                    <span class="fas fa-save"></span>
+                    <span class="fas fa-list"></span>
+                    Saqlash va ortga qaytish
+                </button>
+                <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">
+                    <span class="fas fa-arrow-circle-left"></span>
+                   Ortga qaytish
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/bootstrap-fileinput/js/plugins/piexif.min.js" asp-append-version="true"></script>
+    <script src="~/bootstrap-fileinput/js/fileinput.min.js" asp-append-version="true"></script>
+    <script src="~/bootstrap-fileinput/themes/fa4/theme.min.js"></script>
+
+    <script>
+        $(function () {
+            $('#@Html.NameFor(m => m.LogoPath)').fileinput({
+                theme: 'bs5',
+                browseLabel: 'Izlash',
+                removeLabel: 'Ochirish',
+                msgPlaceholder: '',
+                showClose: false,
+                showCaption: false,
+                showUpload: false,
+                allowedFileExtensions: ["jpg", "jpeg", "png", "bmp", "svg", "gif"],
+
+                @if (!string.IsNullOrEmpty(Model?.LogoPath))
+                {
+                    <text>
+                        initialPreview: ['@Model?.LogoPath'],
+                        initialPreviewAsData: true,
+                        initialPreviewConfig: [
+                            {
+                                caption: 'Logo',
+                                downloadUrl: '@Model?.LogoPath',
+                                url: '@Url.Action("DeleteFile")?&filePath=@Model?.LogoPath'
+                            }
+                        ]
+                    </text>
+                }
+            });
+        });
+        
+    </script>
+}
