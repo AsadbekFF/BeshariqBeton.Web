@@ -52,7 +52,11 @@ builder.Services.Configure<RouteOptions>(options =>
 // AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = "MyAzureAdScheme";
+    })
     .AddCookie(options =>
     {
         options.LoginPath = "/user/log-in";
@@ -61,7 +65,12 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
         options.SlidingExpiration = false; // expiration set explicitly
         options.Events.OnValidatePrincipal = PrincipalCookieValidator.ValidatePrincipal;
     })
-    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+    .AddMicrosoftIdentityWebApp(options =>
+    {
+        builder.Configuration.GetSection("AzureAd").Bind(options);
+        options.NonceCookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
+    }, null, OpenIdConnectDefaults.AuthenticationScheme, null);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews(options =>
