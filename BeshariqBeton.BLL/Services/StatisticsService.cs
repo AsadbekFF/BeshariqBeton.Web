@@ -98,6 +98,7 @@ namespace BeshariqBeton.BLL.Services
                 concrete400Dataset.Data.Add(concrete400Sales);
 
                 var totalSales = concrete100Sales + concrete150Sales + concrete200Sales + concrete250Sales + concrete300Sales + concrete350Sales + concrete400Sales;
+                totalDataset.Data.Add(totalSales);
 
                 var month = $"{Months[yearAgoDate.Month - 1]}, {yearAgoDate.Year}";
                 result.Labels.Add(month);
@@ -112,6 +113,7 @@ namespace BeshariqBeton.BLL.Services
             result.Datasets.Add(concrete300Dataset);
             result.Datasets.Add(concrete350Dataset);
             result.Datasets.Add(concrete400Dataset);
+            result.Datasets.Add(totalDataset);
 
             return result;
         }

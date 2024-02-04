@@ -14,6 +14,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using BeshariqBeton.Web.Infrastructure;
 using BeshariqBeton.Web.Utilities;
 using BeshariqBeton.Web.ModelBinders;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,10 +52,20 @@ builder.Services.Configure<RouteOptions>(options =>
 // AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
 
-builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+// Add services to the container.
+builder.Services.AddControllersWithViews(options =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+});
+
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation()
+    .AddMicrosoftIdentityUI();
 
 builder.Services
     .AddControllers(options =>
@@ -114,12 +129,12 @@ builder.Services.AddScoped<StatisticsService>();
 
 var app = builder.Build();
 
+app.UseCookiePolicy();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    app.UseStatusCodePagesWithReExecute("/error/{0}");
 }
 
 app.UseHttpsRedirection();
@@ -132,6 +147,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapRazorPages();
 
 var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<MasterContext>();

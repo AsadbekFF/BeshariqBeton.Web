@@ -77,23 +77,7 @@
         </div>
     </div>
     <div class="mb-3">
-        <button type="submit" class="btn btn-success" formaction="@(!Html.IsAddPage() ? Url.Action("Edit") : Url.Action("Add"))">
-            <span class="fas fa-save"></span>
-            Saqlash
-        </button>
-        <button type="submit" class="btn btn-success" formaction="@(!Html.IsAddPage() ? Url.Action("Edit", new { goBack=true } ) : Url.Action("Add", new { goBack=true }))">
-            <span class="fas fa-save"></span>
-            <span class="fas fa-list"></span>
-            Saqlash va ortga qaytish
-        </button>
-        <button type="submit" class="btn btn-primary" formaction="@Url.Action("GetTotalPrice")">
-            <span class="fas fa-calculator"></span>
-            Hisoblash
-        </button>
-        <a asp-action="Index" class="btn btn-secondary">
-            <span class="fas fa-arrow-circle-left"></span>
-            Ortga qaytish
-        </a>
+        <partial name="_SaveBackButtons" />
     </div>
 </form>
 
