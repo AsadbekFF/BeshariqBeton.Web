@@ -14,7 +14,6 @@ namespace BeshariqBeton.Web.Infrastructure
                 .ReverseMap()
                 .ForMember(u => u.StandardPermissions, o => o.Ignore());
 
-            CreateMap<PriceSettingsViewModel, CompanyParameters>().ReverseMap();
             CreateMap<PriceSettingsViewModel, ConcreteConsistancesParameters>().ReverseMap();
             CreateMap<PriceSettingsViewModel, ConcreteConsistancesPricesParameters>().ReverseMap();
             CreateMap<PriceSettingsViewModel, DistancePriceParameters>().ReverseMap();
