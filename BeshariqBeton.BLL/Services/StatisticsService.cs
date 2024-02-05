@@ -98,6 +98,7 @@ namespace BeshariqBeton.BLL.Services
                 concrete400Dataset.Data.Add(concrete400Sales);
 
                 var totalSales = concrete100Sales + concrete150Sales + concrete200Sales + concrete250Sales + concrete300Sales + concrete350Sales + concrete400Sales;
+                totalDataset.Data.Add(totalSales);
 
                 var month = $"{Months[yearAgoDate.Month - 1]}, {yearAgoDate.Year}";
                 result.Labels.Add(month);
@@ -112,6 +113,7 @@ namespace BeshariqBeton.BLL.Services
             result.Datasets.Add(concrete300Dataset);
             result.Datasets.Add(concrete350Dataset);
             result.Datasets.Add(concrete400Dataset);
+            result.Datasets.Add(totalDataset);
 
             return result;
         }
@@ -163,6 +165,12 @@ namespace BeshariqBeton.BLL.Services
                 BorderColor = "rgb(72, 24, 130)"
             };
 
+            var totalDataset = new Datasets
+            {
+                Label = "Umumiy",
+                BorderColor = "rgb(173, 37, 37)"
+            };
+
             for (int i = 1; i <= days; i++)
             {
                 var salesInPeriod = await _saleService.GetSalesInPeriod(month, year, i);
@@ -188,6 +196,9 @@ namespace BeshariqBeton.BLL.Services
                 var concrete400Sales = salesInPeriod.Where(s => s.ConcreteProductType == Common.Enums.ConcreteProductType.Concrete400).Select(s => s.Count).Sum();
                 concrete400Dataset.Data.Add(concrete400Sales);
 
+                var totalSales = concrete100Sales + concrete150Sales + concrete200Sales + concrete250Sales + concrete300Sales + concrete350Sales + concrete400Sales;
+                totalDataset.Data.Add(totalSales);
+
                 result.Labels.Add(i.ToString());
             }
 
@@ -198,6 +209,7 @@ namespace BeshariqBeton.BLL.Services
             result.Datasets.Add(concrete300Dataset);
             result.Datasets.Add(concrete350Dataset);
             result.Datasets.Add(concrete400Dataset);
+            result.Datasets.Add(totalDataset);
 
             return result;
         }

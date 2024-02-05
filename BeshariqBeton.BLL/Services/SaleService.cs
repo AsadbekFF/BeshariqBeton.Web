@@ -106,11 +106,9 @@ namespace BeshariqBeton.BLL.Services
 
             var distancePrice = await GetDistancePrice((await Context.Clients.FirstOrDefaultAsync(c => c.Id == sale.ClientId))?.DistanceKm ?? 0);
 
-            var interestRate = (await _defaultParametersService.GetConcreteTypesPricesParametersAsync()).InterestRate;
-
             var total = productPrice + distancePrice;
 
-            return Math.Round(interestRate > 0 ? total + (total * ((double)interestRate / 100d)) : total, 2);
+            return Math.Round(total, 2);
         }
 
         public async Task<List<Sale>> GetSalesInPeriod(int month, int year)
@@ -203,12 +201,16 @@ namespace BeshariqBeton.BLL.Services
         private async Task<double> GetConcreteConsistancePrice(float cementWeight, float sandWeight, float shebenWeight, float chemicalWeight, int count)
         {
             var concreteConsistancesPricesParameters = await _defaultParametersService.GetConcreteConsistancesPricesParametersAsync();
+            var interestRate = (await _defaultParametersService.GetConcreteTypesPricesParametersAsync()).InterestRate;
 
             double cementPrice = cementWeight * count * concreteConsistancesPricesParameters.СementPriceKg;
             double sandCount = sandWeight * count * concreteConsistancesPricesParameters.SandPriceM3;
             double shebenPrice = shebenWeight * count * concreteConsistancesPricesParameters.ShabenPriceM3;
             double chemicalPrice = chemicalWeight * count * concreteConsistancesPricesParameters.СhemicalPriceKg;
-            return (cementPrice + sandCount + chemicalPrice + shebenPrice);
+
+            var total = cementPrice + sandCount + chemicalPrice + shebenPrice;
+
+            return interestRate > 0 ? total + (total * ((double)interestRate / 100d)) : total;
         }
 
         private async Task<long> GetSumpPrice(Sale sale)

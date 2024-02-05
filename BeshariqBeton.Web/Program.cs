@@ -138,15 +138,8 @@ var context = scope.ServiceProvider.GetRequiredService<MasterContext>();
 var logger = app.Services.GetRequiredService<ILogger>();
 
 // Migrate database
-try
-{
-    context.Database.Migrate();
-    // Must-have data
-    context.Initialize();
-}
-catch (Exception ex)
-{
-    logger.Error("Error while initializing master DB:", ex);
-}
+context.Database.Migrate();
+// Must-have data
+context.Initialize();
 
 app.Run();

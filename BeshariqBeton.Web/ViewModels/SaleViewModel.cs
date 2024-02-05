@@ -11,7 +11,7 @@ namespace BeshariqBeton.Web.ViewModels
         [Display(Name = "Beton turi")]
         public ConcreteProductType ConcreteProductType { get; set; }
         [Display(Name = "Miqdori")]
-        public int Count { get; set; }
+        public int? Count { get; set; }
         [Display(Name = "Chiqib ketgan vaqti")]
         public DateTime ComeOutDateTime { get; set; }
         [Display(Name = "Qaytib kelgan vaqti")]
