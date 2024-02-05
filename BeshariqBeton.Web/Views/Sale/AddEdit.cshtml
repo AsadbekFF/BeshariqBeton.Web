@@ -6,6 +6,10 @@
 
 @inject ListHelper ListHelper
 
+@section Styles{
+    <link rel="stylesheet" href="~/bootstrap-timepicker//css/bootstrap-timepicker.min.css" />
+}
+
 @section Breadcrumbs
 {
     <nav>
@@ -43,9 +47,9 @@
                 <span class="text-danger" asp-validation-for="ComeOutDateTime"></span>
             </div>
             <div class="mb-3">
-                <label class="form-label" asp-for="ComeInDateTime"></label>
-                <input class="form-control" asp-for="ComeInDateTime" />
-                <span class="text-danger" asp-validation-for="ComeInDateTime"></span>
+                <label class="form-label" asp-for="ComeInTime"></label>
+                <input class="form-control" asp-for="ComeInTime" />
+                <span class="text-danger" asp-validation-for="ComeInTime"></span>
             </div>
             <div v-show="isSump">
                 <div class="mb-3">
@@ -82,8 +86,7 @@
 </form>
 
 @section Scripts {
-    <script src="~/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-    <script src="~/bootstrap-datepicker/locales/bootstrap-datepicker.uz-latn.min.js"></script>
+    <script src="~/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
     <script>
         var app = new Vue({
             el: '#app',
@@ -97,9 +100,7 @@
                 app.isSump = $('#@Html.NameFor(m => m.ConcreteProductType)').val() == 7;
             });
 
-            $('#@Html.NameFor(m => m.ComeOutDateTime)').datetimepicker({
-                format: 'DD/MM/YYYY HH:mm'
-            });
+            initializeTimepicker($('#@Html.NameFor(m => m.ComeInTime)'));
         });
     </script>
 }
