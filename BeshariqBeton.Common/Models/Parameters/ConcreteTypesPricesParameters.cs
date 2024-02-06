@@ -11,5 +11,6 @@ namespace BeshariqBeton.Common.Models.Parameters
         public int PlatePrice { get; set; }
         public int CinderBlockPrice { get; set; }
         public int InterestRate { get; set; }
+        public int NdsPercent { get; set; }
     }
 }

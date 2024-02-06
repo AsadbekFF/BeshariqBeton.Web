@@ -20,6 +20,15 @@ namespace BeshariqBeton.Web.ViewModels
         [Display(Name = "Qaytib kelgan vaqti")]
         public TimeSpan? ComeInTime { get; set; }
 
+        [Display(Name = "To'lo'v uslubi")]
+        public PaymentType PaymentType { get; set; }
+
+        [Display(Name = "To'landi")]
+        public bool DebtPaid { get; set; }
+
+        [Display(Name = "Xat raqami")]
+        public string LetterNumber { get; set; }
+
         [Display(Name = "Pastgi qismi miqdori")]
         public int? BottomCount { get; set; }
 

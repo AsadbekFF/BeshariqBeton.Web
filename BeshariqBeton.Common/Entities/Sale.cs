@@ -16,6 +16,9 @@ namespace BeshariqBeton.Common.Entities
         public int Count { get; set; }
         public DateTime ComeOutDateTime { get; set; }
         public DateTime? ComeInDateTime { get; set; }
+        public PaymentType PaymentType { get; set; }
+        public bool DebtPaid { get; set; }
+        public string LetterNumber { get; set; }
         public int? BottomCount { get; set; }
         public int? Sump60Count { get; set; }
         public int? Sump90Count { get; set; }

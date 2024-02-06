@@ -29,6 +29,9 @@
                 <th data-field="count" data-sortable="true">Miqdori</th>
                 <th data-field="comeOutDateTime" data-sortable="true" data-formatter="dateTimeFormatter">Chiqib ketgan vaqti</th>
                 <th data-field="comeInDateTime" data-sortable="true" data-formatter="dateTimeFormatter">Qaytib kelgan vaqti</th>
+                <th data-field="letterNumber" data-sortable="true">Xat raqami</th>
+                <th data-field="paymentType" data-formatter="paymentTypeFormatter" data-sortable="true">To'lo'v uslubi</th>
+                <th data-field="debtPaid" data-formatter="booleanFormatter" data-sortable="true">To'landi</th>
                 <th data-field="totalPrice" data-sortable="true" data-formatter="priceFormatter">Jami narxi</th>
                 <th data-formatter="manageFormatter" data-width="220">Boshqaruv</th>
             </tr>
@@ -66,7 +69,18 @@
                 case '9':
                     return 'Shlakoblok';
             }
-        } 
+        }
+        
+        function paymentTypeFormatter(value) {
+            switch (value){
+                case 0:
+                    return 'Naqd pul';
+                case '1':
+                    return 'Plastik karta';
+            }
+
+            return '';
+        }
     </script>
     <partial name="_DataTable" />
 }

@@ -54,7 +54,7 @@ namespace BeshariqBeton.BLL.Services
 
         public override async Task AddAsync(Sale entity)
         {
-            await _storageService.CheckAndSaveStorageForSale(entity);
+            await _storageService.RemoveFromStorageAsync(entity);
             entity.TotalPrice = await GetTotalPrice(entity);
 
             await base.AddAsync(entity);
@@ -63,6 +63,18 @@ namespace BeshariqBeton.BLL.Services
         public override async Task UpdateAsync(Sale entity)
         {
             entity.TotalPrice = await GetTotalPrice(entity);
+
+            var dbSale = await GetByIdNotTrackingAsync(entity.Id);
+
+            if (dbSale.ConcreteProductType != entity.ConcreteProductType)
+            {
+                if (IsConcreteType(dbSale) && IsConcreteType(entity))
+                    await _storageService.ChangeConcreteType(dbSale, entity);
+                else if (!IsConcreteType(dbSale) && IsConcreteType(entity))
+                    await _storageService.RemoveFromStorageAsync(entity);
+                else if (IsConcreteType(dbSale) && !IsConcreteType(entity))
+                    await _storageService.AddToStorageAsync(dbSale);
+            }
 
             await base.UpdateAsync(entity);
         }
@@ -107,6 +119,13 @@ namespace BeshariqBeton.BLL.Services
             var distancePrice = await GetDistancePrice((await Context.Clients.FirstOrDefaultAsync(c => c.Id == sale.ClientId))?.DistanceKm ?? 0);
 
             var total = productPrice + distancePrice;
+
+            if (sale.PaymentType == Common.Enums.PaymentType.Card)
+            {
+                var nds = (await _defaultParametersService.GetConcreteTypesPricesParametersAsync()).NdsPercent;
+
+                total = nds > 0 ? total + (total * ((double)nds / 100d)) : total;
+            }
 
             return Math.Round(total, 2);
         }
@@ -263,6 +282,16 @@ namespace BeshariqBeton.BLL.Services
             while ((distance -= distancePriceParameters.AfterInitialDistanceKm) >= 0);
 
             return price;
+        }
+
+        private bool IsConcreteType(Sale sale)
+        {
+            if (sale.ConcreteProductType == Common.Enums.ConcreteProductType.Sump ||
+                sale.ConcreteProductType == Common.Enums.ConcreteProductType.Plate ||
+                sale.ConcreteProductType == Common.Enums.ConcreteProductType.CinderBlock)
+                return false;
+
+            return true;
         }
     }
 }

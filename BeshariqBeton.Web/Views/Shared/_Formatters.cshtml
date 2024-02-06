@@ -51,6 +51,13 @@
         return result;
     }
 
+    function booleanFormatter(value) {
+        if (value)
+            return '<span class="fas fa-fw fa-check-circle text-success"></span>';
+
+        return '<span class="fas fa-fw fa-times-circle text-danger"></span>';
+    }
+
     function dateTimeFormatter(value) {
         if (!value)
             return value;

@@ -1,5 +1,6 @@
 ﻿using BeshariqBeton.BLL.Base;
 using BeshariqBeton.Common.Entities;
+using BeshariqBeton.Common.Models;
 using BeshariqBeton.DAL.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -17,15 +18,159 @@ namespace BeshariqBeton.BLL.Services
             _defaultParametersService = defaultParametersService;
         }
 
-        public async Task CheckAndSaveStorageForSale(Sale sale)
+        public async Task ChangeConcreteType(Sale previousSale, Sale currentSale)
         {
+            var previousNeeds = await GetConcreteTypeNeedsAsync(previousSale);
+
+            var storageParameters = await _defaultParametersService.GetStorageParametersAsync();
+
+            double cementNeed = previousNeeds.CementNeed;
+            double sandNeed = previousNeeds.SandNeed;
+            double shebenNeed = previousNeeds.ShebenNeed;
+            double chemicalNeed = previousNeeds.ChemicalNeed;
+
+            cementNeed *= previousSale.Count;
+            sandNeed *= previousSale.Count;
+            chemicalNeed *= previousSale.Count;
+            shebenNeed *= previousSale.Count;
+
+            storageParameters.CementRemainKg += cementNeed;
+            storageParameters.SandRemainM3 += sandNeed;
+            storageParameters.ShebenRemainM3 += shebenNeed;
+            storageParameters.ChemicalRemainKg += chemicalNeed;
+
+            var currentNeeds = await GetConcreteTypeNeedsAsync(currentSale);
+
+            cementNeed = currentNeeds.CementNeed;
+            sandNeed = currentNeeds.SandNeed;
+            shebenNeed = currentNeeds.ShebenNeed;
+            chemicalNeed = currentNeeds.ChemicalNeed;
+
+            cementNeed *= currentSale.Count;
+            sandNeed *= currentSale.Count;
+            chemicalNeed *= currentSale.Count;
+            shebenNeed *= currentSale.Count;
+
+            var errorMessage = new StringBuilder();
+
+            if (cementNeed > storageParameters.CementRemainKg)
+            {
+                errorMessage.AppendLine("Sement yetarlik emas.");
+            }
+
+            if (sandNeed > storageParameters.SandRemainM3)
+            {
+                errorMessage.AppendLine("Qum yetarlik emas.");
+            }
+
+            if (shebenNeed > storageParameters.ShebenRemainM3)
+            {
+                errorMessage.AppendLine("Sheben yetarlik emas.");
+            }
+
+            if (chemicalNeed > storageParameters.ChemicalRemainKg)
+            {
+                errorMessage.AppendLine("Ximikat yetarlik emas.");
+            }
+
+            if (errorMessage.Length > 0)
+            {
+                throw new BeshariqBeton.Common.Exceptions.BetonException(errorMessage.ToString());
+            }
+
+            storageParameters.CementRemainKg -= cementNeed;
+            storageParameters.SandRemainM3 -= sandNeed;
+            storageParameters.ShebenRemainM3 -= shebenNeed;
+            storageParameters.ChemicalRemainKg -= chemicalNeed;
+
+            await _defaultParametersService.SaveParametersAsync(storageParameters);
+        }
+
+        public async Task AddToStorageAsync(Sale previousSale)
+        {
+            var previousNeeds = await GetConcreteTypeNeedsAsync(previousSale);
+
+            var storageParameters = await _defaultParametersService.GetStorageParametersAsync();
+
+            double cementNeed = previousNeeds.CementNeed;
+            double sandNeed = previousNeeds.SandNeed;
+            double shebenNeed = previousNeeds.ShebenNeed;
+            double chemicalNeed = previousNeeds.ChemicalNeed;
+
+            cementNeed *= previousSale.Count;
+            sandNeed *= previousSale.Count;
+            chemicalNeed *= previousSale.Count;
+            shebenNeed *= previousSale.Count;
+
+            storageParameters.CementRemainKg += cementNeed;
+            storageParameters.SandRemainM3 += sandNeed;
+            storageParameters.ShebenRemainM3 += shebenNeed;
+            storageParameters.ChemicalRemainKg += chemicalNeed;
+
+            await _defaultParametersService.SaveParametersAsync(storageParameters);
+        }
+
+        public async Task RemoveFromStorageAsync(Sale sale)
+        {
+            var needs = await GetConcreteTypeNeedsAsync(sale);
+
+            double cementNeed = needs.CementNeed;
+            double sandNeed = needs.SandNeed;
+            double shebenNeed = needs.ShebenNeed;
+            double chemicalNeed = needs.ChemicalNeed;
+
+            cementNeed *= sale.Count;
+            sandNeed *= sale.Count;
+            chemicalNeed *= sale.Count;
+            shebenNeed *= sale.Count;
+
+            var errorMessage = new StringBuilder();
+            var storageParameters = await _defaultParametersService.GetStorageParametersAsync();
+
+            if (cementNeed > storageParameters.CementRemainKg)
+            {
+                errorMessage.AppendLine("Sement yetarlik emas.");
+            }
+
+            if (sandNeed > storageParameters.SandRemainM3)
+            {
+                errorMessage.AppendLine("Qum yetarlik emas.");
+            }
+
+            if (shebenNeed > storageParameters.ShebenRemainM3)
+            {
+                errorMessage.AppendLine("Sheben yetarlik emas.");
+            }
+
+            if (chemicalNeed > storageParameters.ChemicalRemainKg)
+            {
+                errorMessage.AppendLine("Ximikat yetarlik emas.");
+            }
+
+            if (errorMessage.Length > 0)
+            {
+                throw new BeshariqBeton.Common.Exceptions.BetonException(errorMessage.ToString());
+            }
+
+            storageParameters.CementRemainKg -= cementNeed;
+            storageParameters.SandRemainM3 -= sandNeed;
+            storageParameters.ShebenRemainM3 -= shebenNeed;
+            storageParameters.ChemicalRemainKg -= chemicalNeed;
+
+            await _defaultParametersService.SaveParametersAsync(storageParameters);
+        }
+
+        private async Task<ConcreteTypeNeeds> GetConcreteTypeNeedsAsync(Sale sale)
+        {
+            var result = new ConcreteTypeNeeds();
+            var consistanceParameters = await _defaultParametersService.GetConcreteConsistancesParametersAsync();
+
             double cementNeed = 0;
             double sandNeed = 0;
             double shebenNeed = 0;
             double chemicalNeed = 0;
-            var consistanceParameters = await _defaultParametersService.GetConcreteConsistancesParametersAsync();
 
-            switch(sale.ConcreteProductType)
+            switch (sale.ConcreteProductType)
             {
                 case Common.Enums.ConcreteProductType.Concrete100:
                     cementNeed = consistanceParameters.СementWeightKg100;
@@ -71,47 +216,12 @@ namespace BeshariqBeton.BLL.Services
                     break;
             }
 
-            cementNeed *= sale.Count;
-            sandNeed *= sale.Count;
-            chemicalNeed *= sale.Count;
-            shebenNeed *= sale.Count;
+            result.CementNeed = cementNeed;
+            result.SandNeed = sandNeed;
+            result.ShebenNeed = shebenNeed;
+            result.ChemicalNeed = chemicalNeed;
 
-            var errorMessage = new StringBuilder();
-            var storageParameters = await _defaultParametersService.GetStorageParametersAsync();
-
-            if (cementNeed > storageParameters.CementRemainKg)
-            {
-                errorMessage.AppendLine("Sement yetarlik emas.");
-            }
-
-            if (sandNeed > storageParameters.SandRemainM3)
-            {
-                errorMessage.AppendLine("Qum yetarlik emas.");
-            }
-
-            if (shebenNeed > storageParameters.ShebenRemainM3)
-            {
-                errorMessage.AppendLine("Sheben yetarlik emas.");
-            }
-
-            if (chemicalNeed > storageParameters.ChemicalRemainKg)
-            {
-                errorMessage.AppendLine("Ximikat yetarlik emas.");
-            }
-
-            if (errorMessage.Length > 0)
-            {
-                throw new BeshariqBeton.Common.Exceptions.BetonException(errorMessage.ToString());
-            }
-            else
-            {
-                storageParameters.CementRemainKg -= cementNeed;
-                storageParameters.SandRemainM3 -= sandNeed;
-                storageParameters.ShebenRemainM3 -= shebenNeed;
-                storageParameters.ChemicalRemainKg -= chemicalNeed;
-
-                await _defaultParametersService.SaveParametersAsync(storageParameters);
-            }
+            return result;
         }
     }
 }

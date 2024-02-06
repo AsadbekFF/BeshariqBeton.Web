@@ -73,10 +73,29 @@
                     <span class="text-danger" asp-validation-for="CoverCount"></span>
                 </div>
             </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="mb-3">
+                <label class="form-label" asp-for="PaymentType"></label>
+                <select class="form-select" asp-items="@Html.GetEnumSelectList<PaymentType>()" asp-for="PaymentType"></select>
+                <span class="text-danger" asp-validation-for="PaymentType"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="LetterNumber"></label>
+                <input class="form-control" asp-for="LetterNumber" />
+                <span class="text-danger" asp-validation-for="LetterNumber"></span>
+            </div>
             <div class="mb-3">
                 <label class="form-label" asp-for="TotalPrice"></label>
                 <input class="form-control" asp-for="TotalPrice" disabled />
                 <span class="text-danger" asp-validation-for="TotalPrice"></span>
+            </div>
+            <div class="mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="DebtPaid" />
+                    <label class="form-check-label" asp-for="DebtPaid"></label>
+                    <span class="text-danger" asp-validation-for="DebtPaid"></span>
+                </div>
             </div>
         </div>
     </div>

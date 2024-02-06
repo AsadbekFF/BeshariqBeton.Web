@@ -30,6 +30,10 @@ namespace BeshariqBeton.Web.ViewModels
         public int CinderBlockPrice { get; set; }
         [Display(Name = "Stavka %")]
         public int InterestRate { get; set; }
+        [Display(Name = "NDS %")]
+        public int NdsPercent { get; set; }
+
+
         [Display(Name = "Pastgi qismi narxi")]
         public int BottomPrice { get; set; }
         [Display(Name = "60 lik narxi")]

@@ -72,6 +72,7 @@ namespace BeshariqBeton.Web.Controllers
                 model.PlatePrice = concreteTypesPrices.PlatePrice;
                 model.CinderBlockPrice = concreteTypesPrices.CinderBlockPrice;
                 model.InterestRate = concreteTypesPrices.InterestRate;
+                model.NdsPercent = concreteTypesPrices.NdsPercent;
 
                 var distancePriceParameters = await _defaultParametersService.GetDistancePriceParametersAsync();
 
