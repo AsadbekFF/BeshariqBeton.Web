@@ -120,13 +120,6 @@ namespace BeshariqBeton.BLL.Services
 
             var total = productPrice + distancePrice;
 
-            if (sale.PaymentType == Common.Enums.PaymentType.Card)
-            {
-                var nds = (await _defaultParametersService.GetConcreteTypesPricesParametersAsync()).NdsPercent;
-
-                total = nds > 0 ? total + (total * ((double)nds / 100d)) : total;
-            }
-
             return Math.Round(total, 2);
         }
 
@@ -148,7 +141,8 @@ namespace BeshariqBeton.BLL.Services
                 concreteConsistancesParameters.SandVolume100,
                 concreteConsistancesParameters.ShabenVolume100,
                 concreteConsistancesParameters.СhemicalKg100,
-                sale.Count);
+                sale.Count,
+                sale.PaymentType == Common.Enums.PaymentType.Card);
         }
 
         private async Task<double> GetTotalPriceConcrete150(Sale sale)
@@ -159,7 +153,8 @@ namespace BeshariqBeton.BLL.Services
                 concreteConsistancesParameters.SandVolume150,
                 concreteConsistancesParameters.ShabenVolume150,
                 concreteConsistancesParameters.СhemicalKg150,
-                sale.Count);
+                sale.Count,
+                sale.PaymentType == Common.Enums.PaymentType.Card);
         }
 
         private async Task<double> GetTotalPriceConcrete200(Sale sale)
@@ -170,7 +165,8 @@ namespace BeshariqBeton.BLL.Services
                 concreteConsistancesParameters.SandVolume200,
                 concreteConsistancesParameters.ShabenVolume200,
                 concreteConsistancesParameters.СhemicalKg200,
-                sale.Count);
+                sale.Count,
+                sale.PaymentType == Common.Enums.PaymentType.Card);
         }
 
         private async Task<double> GetTotalPriceConcrete250(Sale sale)
@@ -181,7 +177,8 @@ namespace BeshariqBeton.BLL.Services
                 concreteConsistancesParameters.SandVolume250,
                 concreteConsistancesParameters.ShabenVolume250,
                 concreteConsistancesParameters.СhemicalKg250,
-                sale.Count);
+                sale.Count,
+                sale.PaymentType == Common.Enums.PaymentType.Card);
         }
 
         private async Task<double> GetTotalPriceConcrete300(Sale sale)
@@ -192,7 +189,8 @@ namespace BeshariqBeton.BLL.Services
                 concreteConsistancesParameters.SandVolume300,
                 concreteConsistancesParameters.ShabenVolume300,
                 concreteConsistancesParameters.СhemicalKg300,
-                sale.Count);
+                sale.Count,
+                sale.PaymentType == Common.Enums.PaymentType.Card);
         }
 
         private async Task<double> GetTotalPriceConcrete350(Sale sale)
@@ -203,7 +201,8 @@ namespace BeshariqBeton.BLL.Services
                 concreteConsistancesParameters.SandVolume350,
                 concreteConsistancesParameters.ShabenVolume350,
                 concreteConsistancesParameters.СhemicalKg350,
-                sale.Count);
+                sale.Count,
+                sale.PaymentType == Common.Enums.PaymentType.Card);
         }
 
         private async Task<double> GetTotalPriceConcrete400(Sale sale)
@@ -214,13 +213,15 @@ namespace BeshariqBeton.BLL.Services
                 concreteConsistancesParameters.SandVolume400,
                 concreteConsistancesParameters.ShabenVolume400,
                 concreteConsistancesParameters.СhemicalKg400,
-                sale.Count);
+                sale.Count,
+                sale.PaymentType == Common.Enums.PaymentType.Card);
         }
 
-        private async Task<double> GetConcreteConsistancePrice(float cementWeight, float sandWeight, float shebenWeight, float chemicalWeight, int count)
+        private async Task<double> GetConcreteConsistancePrice(float cementWeight, float sandWeight, float shebenWeight, float chemicalWeight, int count, bool withNds)
         {
             var concreteConsistancesPricesParameters = await _defaultParametersService.GetConcreteConsistancesPricesParametersAsync();
-            var interestRate = (await _defaultParametersService.GetConcreteTypesPricesParametersAsync()).InterestRate;
+            var pricesParameters = await _defaultParametersService.GetConcreteTypesPricesParametersAsync();
+            var interestRate = pricesParameters.InterestRate;
 
             double cementPrice = cementWeight * count * concreteConsistancesPricesParameters.СementPriceKg;
             double sandCount = sandWeight * count * concreteConsistancesPricesParameters.SandPriceM3;
@@ -228,6 +229,13 @@ namespace BeshariqBeton.BLL.Services
             double chemicalPrice = chemicalWeight * count * concreteConsistancesPricesParameters.СhemicalPriceKg;
 
             var total = cementPrice + sandCount + chemicalPrice + shebenPrice;
+
+            if (withNds)
+            {
+                var nds = pricesParameters.NdsPercent;
+
+                total = nds > 0 ? total + (total * ((double)nds / 100d)) : total;
+            }
 
             return interestRate > 0 ? total + (total * ((double)interestRate / 100d)) : total;
         }
