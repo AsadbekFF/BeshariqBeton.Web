@@ -1,10 +1,14 @@
-﻿@{
+﻿@using BeshariqBeton.Common.Models.Filters
+@{
     ViewData["Title"] = "Sotuvlar";
 }
+
+@inject ListHelper ListHelper
 
 @section Styles
 {
     <link href="~/bootstrap-fileinput/css/fileinput.min.css" />
+    <link href="~/bootstrap-datepicker//css/bootstrap-datepicker.min.css"/>
 }
 
 @section Breadcrumbs
@@ -18,33 +22,151 @@
 }
 
 <div id="app">
-    <div id="toolbar" class="pb-3">
-        <a asp-action="Add" class="btn btn-success"><span class="fas fa-plus-circle"></span> Qo'shish</a>
+    <div id="toolbar" class="pb-3 row">
+        <div class="col-auto">
+            <a asp-action="Add" class="btn btn-success"><span class="fas fa-plus-circle"></span> Qo'shish</a>
+        </div>
+        <div class="col-auto">
+            <select class="form-select" asp-items="@Html.GetEnumSelectList<SaleFilterType>()" v-model="filterType"><option></option></select>
+        </div>
+        <div class="col-auto" v-show="filterType == 0">
+            <select class="form-select" asp-items="@(await ListHelper.GetClientsAsync())" v-model="client"><option></option></select>
+        </div>
+        <div class="col-auto" v-show="filterType == 1">
+            <select class="form-select" asp-items="@Html.GetEnumSelectList<ConcreteProductType>()" v-model="productType"><option></option></select>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" id="from" type="date" v-model="from" />
+        </div>
+        <div class="col-auto">
+            <input class="form-control" id="to" type="date" v-model="to"/>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-secondary" v-on:click="filter">Filterlash</button>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-secondary" v-on:click="resetFilter">Filterni qayta o'rnatish</button>
+        </div>
     </div>
     <table id="data-table" class="table">
         <thead>
             <tr>
                 <th data-field="client.name" data-sortable="true">Klient nomi</th>
-                <th data-field="concreteProductType" data-formatter="concreteTypeFormatter" data-sortable="true">Produkta turi</th>
-                <th data-field="count" data-sortable="true">Miqdori</th>
-                <th data-field="comeOutDateTime" data-sortable="true" data-formatter="dateTimeFormatter">Chiqib ketgan vaqti</th>
-                <th data-field="comeInDateTime" data-sortable="true" data-formatter="dateTimeFormatter">Qaytib kelgan vaqti</th>
+                <th data-field="concreteProductType" data-formatter="saleConcreteTypeFormatter" data-sortable="true">Produkta turi</th>
+                <th data-field="count" data-formatter="saleFormatter" data-sortable="true">Miqdori</th>
+                <th data-field="comeOutDateTime" data-sortable="true" data-formatter="saleDateTimeFormatter">Chiqib ketgan vaqti</th>
+                <th data-field="comeInDateTime" data-sortable="true" data-formatter="saleDateTimeFormatter">Qaytib kelgan vaqti</th>
                 <th data-field="letterNumber" data-sortable="true">Xat raqami</th>
-                <th data-field="paymentType" data-formatter="paymentTypeFormatter" data-sortable="true">To'lo'v uslubi</th>
-                <th data-field="debtPaid" data-formatter="booleanFormatter" data-sortable="true">To'landi</th>
+                <th data-field="paymentType" data-formatter="salePaymentTypeFormatter" data-sortable="true">To'lo'v uslubi</th>
+                <th data-field="debtPaid" data-formatter="saleBooleanFormatter" data-sortable="true">To'landi</th>
                 <th data-field="totalPrice" data-sortable="true" data-formatter="priceFormatter">Jami narxi</th>
-                <th data-formatter="manageFormatter" data-width="220">Boshqaruv</th>
+                <th data-formatter="saleManageFormatter" data-width="220">Boshqaruv</th>
             </tr>
         </thead>
     </table>
 </div>
 @section Scripts
 {
+    <script src="~/bootstrap-table/extensions/export/bootstrap-table-export.min.js" asp-append-version="true"></script>
+    <script src="~/lib-custom/tableExport/tableExport.min.js" asp-append-version="true"></script>
+    <script src="~/lib-custom/tableExport/jspdf.umd.min.js" asp-append-version="true"></script>
+    <script src="~/lib-custom/tableExport/xlsx.core.min.js" asp-append-version="true"></script>
+    <script src="~/bootstrap-datepicker/js/bootstrap-datepicker.min.js" asp-append-version="true"></script>
     <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                from: null,
+                to: null,
+                filterType: null,
+                client: null,
+                productType: null
+            },
+            methods: {
+                filter: function () {
+                    $('#data-table').bootstrapTable('refresh', { query: { offset: 0 } });
+                },
+                resetFilter: function () {
+                    this.filterType = null;
+                    this.client = null;
+                    this.productType = null;
+                    this.from = null;
+                    this.to = null;
+
+                    this.filter();
+                }
+            }
+        });
         dataTableOptions = {
             search: true,
-            url: '@Url.Action("GetDataJsonSearch")'
+            url: '@Url.Action("GetDataJsonSearch")',
+            showExport: true,
+            exportDataType: 'all',
+            exportTypes: ['excel', 'xlsx', 'pdf', 'csv', 'txt'],
+            exportOptions: { ignoreColumn: [-1] },
+            icons: {
+                refresh: 'fa-sync-alt',
+                columns: 'fa-th',
+                export: 'fa-download'
+            },
+            queryParams: function (params) {
+                params['@nameof(SaleFilter.SaleFilterType)'] = app.filterType;
+                params['@nameof(SaleFilter.ClientId)'] = app.client;
+                params['@nameof(SaleFilter.ConcreteProductType)'] = app.productType;
+                params['@nameof(SaleFilter.From)'] = app.from;
+                params['@nameof(SaleFilter.To)'] = app.to;
+                return params;
+            }
+        };
+
+        function saleConcreteTypeFormatter(value, entity) {
+            if (entity.client.name == 'Umumiy narxi') {
+                return null;
+            }
+
+            return concreteTypeFormatter(value);
         }
+
+        function saleFormatter(value, entity) {
+            if (entity.client.name == 'Umumiy narxi') {
+                return null;
+            }
+
+            return value;
+        }
+
+        function salePaymentTypeFormatter(value, entity) {
+            if (entity.client.name == 'Umumiy narxi') {
+                return null;
+            }
+
+            return paymentTypeFormatter(value);
+        }
+
+        function saleDateTimeFormatter(value, entity) {
+            if (entity.client.name == 'Umumiy narxi') {
+                return null;
+            }
+
+            return dateTimeFormatter(value);
+        }
+
+        function saleBooleanFormatter(value, entity) {
+            if (entity.client.name == 'Umumiy narxi') {
+                return null;
+            }
+
+            return booleanFormatter(value);
+        }
+
+        function saleManageFormatter(value, entity) {
+            if (entity.client.name == 'Umumiy narxi') {
+                return null;
+            }
+
+            return manageFormatter(value, entity);
+        }
+
         function concreteTypeFormatter(value) {
             
             switch (value) {

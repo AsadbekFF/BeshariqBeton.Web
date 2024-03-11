@@ -3,19 +3,6 @@
   "defaultProvider": "cdnjs",
   "libraries": [
     {
-      "library": "bootstrap-table@1.22.2",
-      "destination": "wwwroot/bootstrap-table/",
-      "files": [
-        "bootstrap-table.min.js",
-        "bootstrap-table.min.css",
-        "bootstrap-table.css",
-        "bootstrap-table.js",
-        "locale/bootstrap-table-uz-Latn-UZ.js",
-        "locale/bootstrap-table-uz-Latn-UZ.min.js"
-      ]
-    },
-    {
-      "provider": "cdnjs",
       "library": "fontawesome-iconpicker@3.2.0",
       "destination": "wwwroot/fontawesome-iconpicker/",
       "files": [
@@ -26,7 +13,6 @@
       ]
     },
     {
-      "provider": "cdnjs",
       "library": "popper.js@2.11.8",
       "destination": "wwwroot/popper.js/",
       "files": [
@@ -34,7 +20,6 @@
       ]
     },
     {
-      "provider": "cdnjs",
       "library": "font-awesome@6.5.1",
       "destination": "wwwroot/font-awesome/",
       "files": [
@@ -51,12 +36,10 @@
       ]
     },
     {
-      "provider": "cdnjs",
       "library": "bootstrap-fileinput@5.5.2",
       "destination": "wwwroot/bootstrap-fileinput/"
     },
     {
-      "provider": "cdnjs",
       "library": "bootstrap-touchspin@4.7.3",
       "destination": "wwwroot/bootstrap-touchspin/",
       "files": [
@@ -64,7 +47,6 @@
       ]
     },
     {
-      "provider": "cdnjs",
       "library": "bootstrap-timepicker@0.5.2",
       "destination": "wwwroot/bootstrap-timepicker/",
       "files": [
@@ -73,7 +55,6 @@
       ]
     },
     {
-      "provider": "cdnjs",
       "library": "bootstrap-datepicker@1.10.0",
       "destination": "wwwroot/bootstrap-datepicker/",
       "files": [
@@ -83,7 +64,6 @@
       ]
     },
     {
-      "provider": "cdnjs",
       "library": "vue@2.6.14",
       "destination": "wwwroot/vue/",
       "files": [
@@ -92,7 +72,6 @@
       ]
     },
     {
-      "provider": "cdnjs",
       "library": "moment.js@2.30.1",
       "destination": "wwwroot/moment.js/",
       "files": [
@@ -102,9 +81,23 @@
       ]
     },
     {
-      "provider": "cdnjs",
       "library": "Chart.js@4.4.1",
       "destination": "wwwroot/Chart.js/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "bootstrap-table@1.22.2",
+      "destination": "wwwroot/bootstrap-table/",
+      "files": [
+        "bootstrap-table.min.js",
+        "extensions/export/bootstrap-table-export.js",
+        "extensions/export/bootstrap-table-export.min.js",
+        "locale/bootstrap-table-uz-Latn-UZ.min.js",
+        "locale/bootstrap-table-uz-Latn-UZ.js",
+        "bootstrap-table.min.css",
+        "bootstrap-table.js",
+        "bootstrap-table.css"
+      ]
     }
   ]
 }

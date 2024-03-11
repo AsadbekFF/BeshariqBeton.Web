@@ -1,16 +1,13 @@
 ﻿using BeshariqBeton.BLL.Base;
 using BeshariqBeton.Common.Entities;
+using BeshariqBeton.Common.Enums;
 using BeshariqBeton.Common.Models;
-using BeshariqBeton.Common.Models.Parameters;
+using BeshariqBeton.Common.Models.Filters;
 using BeshariqBeton.DAL.Infrastructure;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
+using System.Linq.Dynamic.Core;
 
 namespace BeshariqBeton.BLL.Services
 {
@@ -30,7 +27,7 @@ namespace BeshariqBeton.BLL.Services
             return base.FilterAsync(sort, order, limit, offset, new string[] {nameof(Sale.Client)});
         }
 
-        public async Task<Items<Sale>> FilterAsync(string sort, string order, int limit, int offset, string search)
+        public async Task<Items<Sale>> FilterAsync(string sort, string order, int limit, int offset, string search, SaleFilter filter)
         {
             var predicate = PredicateBuilder.New<Sale>(true);
 
@@ -39,7 +36,73 @@ namespace BeshariqBeton.BLL.Services
                 predicate.Or(e => e.Client.Name.Contains(search));
             }
 
-            return await FilterAsync(sort, order, limit, offset, predicate, new string[] {nameof(Sale.Client)}, null);
+            if (filter.SaleFilterType == SaleFilterType.ByClient && filter.ClientId.HasValue)
+            {
+                predicate.And(s => s.ClientId == filter.ClientId);
+            }
+
+            if (filter.SaleFilterType == SaleFilterType.ByProduct && filter.ConcreteProductType.HasValue)
+            {
+                predicate.And(s => s.ConcreteProductType == filter.ConcreteProductType);
+            }
+
+            if (filter.From.HasValue)
+            {
+                predicate.And(s => s.ComeOutDateTime.Date >= filter.From.Value.Date);
+            }
+
+            if (filter.To.HasValue)
+            {
+                predicate.And(s => s.ComeOutDateTime.Date <= filter.To.Value.Date);
+            }
+
+            return await CustomFilterAsync(sort, order, limit, offset, predicate, new string[] {nameof(Sale.Client)}, null);
+        }
+
+        private async Task<Items<Sale>> CustomFilterAsync(string sort, string order, int limit, int offset, Expression<Func<Sale, bool>> filterExpression, string[] includedProperties, Expression<Func<Sale, Sale>> projectionExpression)
+        {
+            var items = Context.Set<Sale>().AsQueryable();
+
+            // Included properties
+            if (includedProperties != null)
+                foreach (var includeProperty in includedProperties)
+                    items = items.Include(includeProperty);
+
+            if (filterExpression != null)
+                items = items.Where(filterExpression);
+
+            // Order
+            if (!string.IsNullOrEmpty(sort))
+                items = items.OrderBy(sort + " " + order);
+
+            // Total items
+            var total = await items.CountAsync();
+
+            // Pagination
+            if (limit > 0)
+                items = items.Skip(offset).Take(limit);
+
+            // Projection
+            if (projectionExpression != null)
+                items = items.Select(projectionExpression);
+
+            var result = await items.ToListAsync();
+
+            result.Add(new Sale
+            {
+                Client = new Client
+                {
+                    Name = "Umumiy narxi"
+                },
+                TotalPrice = items.Sum(s => s.TotalPrice),
+            });
+
+            // Pagination
+            return new Items<Sale>
+            {
+                Rows = result,
+                Total = total
+            };
         }
 
         public override Task<Sale> GetByIdNotTrackingAsync(int id)

@@ -1,6 +1,7 @@
 ﻿using BeshariqBeton.BLL.Base;
 using BeshariqBeton.BLL.Services;
 using BeshariqBeton.Common.Entities;
+using BeshariqBeton.Common.Models.Filters;
 using BeshariqBeton.Common.Security;
 using BeshariqBeton.DAL.Infrastructure;
 using BeshariqBeton.Web.Infrastructure;
@@ -22,9 +23,9 @@ namespace BeshariqBeton.Web.Controllers
 
         [HttpGet("[action]")]
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
-        public async Task<IActionResult> GetDataJsonSearch(string sort, string order, int limit, int offset, string search)
+        public async Task<IActionResult> GetDataJsonSearch(string sort, string order, int limit, int offset, string search, SaleFilter filter)
         {
-            var result = await _saleService.FilterAsync(sort, order, limit, offset, search);
+            var result = await _saleService.FilterAsync(sort, order, limit, offset, search, filter);
             return Json(new { total = result.Total, rows = result.Rows });
         }
 

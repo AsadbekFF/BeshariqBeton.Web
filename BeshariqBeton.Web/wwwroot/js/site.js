@@ -187,6 +187,8 @@ var defaultDataTableOptions = {
     },
     pagination: true,
     sidePagination: 'server',
+    showColumns: true,
+    showRefresh: true,
     toolbar: '#toolbar',
     buttonsClass: 'primary',
     undefinedText: '',
@@ -320,7 +322,7 @@ function getManageColumnTemplate(entity, template, tableElement, editText, delet
 
     if (template)
         result +=
-            '<div class="dropdown" id="moreButton"><button type="button" class="btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown"><span class="fas fa-ellipsis-v"></span> ' + moreText + '</button><div class="dropdown-menu">' + template + '</div></div>';
+            '<div class="dropdown" id="moreButton"><button type="button" class="btn btn-sm btn-info dropdown-toggle" data-bs-toggle="dropdown"><span class="fas fa-ellipsis-v"></span> ' + moreText + '</button><div class="dropdown-menu">' + template + '</div></div>';
 
     result += '<a href="' + editUrl + '" class="btn btn-sm btn-secondary"><span class="fas fa-edit"></span> ' + editText + '</a> <button type="button" class="btn btn-sm btn-danger" data-id="' + entity[options.uniqueId] + '" data-delete-url="' + options.deleteUrl + '" data-toggle="modal" data-target="#confirmDelete"><span class="fas fa-trash"></span> ' + deleteText + '</button>';
 

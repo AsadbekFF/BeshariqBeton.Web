@@ -31,4 +31,8 @@
     <ProjectReference Include="..\BeshariqBeton.DAL\BeshariqBeton.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\lib-custom\tableExport\" />
+  </ItemGroup>
+
 </Project>

@@ -193,7 +193,8 @@ namespace BeshariqBeton.BLL.Base
             var total = await items.CountAsync();
 
             // Pagination
-            items = items.Skip(offset).Take(limit);
+            if (limit > 0)
+                items = items.Skip(offset).Take(limit);
 
             // Projection
             if (projectionExpression != null)
